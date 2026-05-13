@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Load ttyd module, alt screen and tmux if requested
+<%- require "socket" -%>
+module use /storage/sys/<%= Socket.gethostname %>/modules
+module load ttyd
+module load trzsz
+<%- if context.use_system_version == "0" -%>
+module load tmux
+<%- end -%>
+module list
+
+# Debug
+echo "port: ${port}"
+#echo "password: ${password}"
+
+# Setup
+#export TTYD_CREDENTIAL="$USER:${password}"
+session_name=sterminal_${port}
+
+source color_themes/<%= context.color_theme %>
+theme_options="theme={'black':'${theme_black}','red':'${theme_red}','green':'${theme_green}','yellow':'${theme_yellow}','blue':'${theme_blue}','purple':'${theme_purple}','cyan':'${theme_cyan}','white':'${theme_white}','brightBlack':'${theme_brightBlack}','brightRed':'${theme_brightRed}','brightGreen':'${theme_brightGreen}','brightYellow':'${theme_brightYellow}','brightBlue':'${theme_brightBlue}','brightPurple':'${theme_brightPurple}','brightCyan':'${theme_brightCyan}','brightWhite':'${theme_brightWhite}','background':'${theme_background}','foreground':'${theme_foreground}','cursorColor':'${theme_cursorColor}','selectionBackground':'${theme_selectionBackground}'}"
+
+cd $HOME
+
+ttyd \
+  --writable \
+  --max-clients=1 \
+  --cwd="${HOME}" \
+  --port="${port}" \
+  --auth-header "X-Forwarded-User" \
+  --auth-header-value "${USER}" \
+  --client-option $theme_options \
+  -t enableZmodem=true -t enableTrzsz=true -t enableSixel=true \
+<%- if context.session_type == "screen" -%>
+ screen -T xterm-256color -dRR  ${session_name}
+<%- elsif context.session_type == "tmux" -%>
+ tmux new-session -A -s ${session_name}
+<%- elsif context.session_type == "shell" -%>
+ ${SHELL}
+<%- end -%>

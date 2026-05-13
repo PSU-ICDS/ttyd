@@ -1,0 +1,25 @@
+Bootstrap: docker
+From: registry.access.redhat.com/ubi8/ubi
+
+%post
+    yum update -y && yum install -y \
+    gcc \
+    cmake \
+    git \
+    curl \
+    autoconf \
+    automake \
+    libtool
+
+    # Clone the ttyd repository
+    git clone https://github.com/tsl0922/ttyd.git /ttyd
+
+    # Add TTYD_CREDENTIAL env variable option
+    sed -i '/server = server_new(argc, argv, start);/a\\n\ \ const char *env_credential = getenv("TTYD_CREDENTIAL");\n\ \ if (env_credential != NULL) {\n\ \ \ \ char b64_text[256];\n\ \ \ \ lws_b64_encode_string(env_credential, strlen(env_credential), b64_text, sizeof(b64_text));\n\ \ \ \ server->credential = strdup(b64_text);\n\ \ }' /ttyd/src/server.c
+
+    # Run the cross-build script
+    cd /ttyd
+    ./scripts/cross-build.sh
+
+%runscript
+    exec /opt/stage/x86_64-linux-musl/bin/ttyd "$@"

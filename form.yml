@@ -1,0 +1,51 @@
+---
+title: "Persistent Terminal"
+form_header: "Includes trzsz file transfer support and Sixel image output support (img2sixel / lsix)"
+cluster:
+  - 2e
+
+form:
+  - session_type
+  - use_system_version
+  - color_theme
+  - auto_accounts
+  - auto_queues
+  - global_bc_num_hours
+  - global_cores
+  - global_memory
+  - global_advanced
+  - global_sbatch_options
+  - bc_email_on_started
+
+attributes:
+  use_system_version:
+    widget: "check_box"
+    value: "0"
+    label: Use system installation of tmux instead of software stack version
+    help: "Updated software stack version of tmux includes [Trzsz](https://trzsz.github.io/#trzsz-manual) for file transfer"
+  color_theme:
+    label: "Color theme"
+    widget: select
+    options:
+      - ['default','default.sh']
+      - ['dark-Monokai', 'Monokai_Remastered.sh']
+      - ['dark-Cobalt','Cobalt2.sh']
+      - ['dark-Tommorow Night Bright','Tomorrow_Night_Bright.sh']
+      - ['dark-Tomorrow Night','Tomorrow_Night.sh']
+      - ['dark-Tomorrow Night Eighties','Tomorrow_Night_Eighties.sh']
+      - ['dark-Red Alert','Red_Alert.sh']
+      - ['dark-idleToes','idleToes.sh']
+      - ['dark-Pastel Dark','Pastel_Dark.sh']
+      - ['light-Github','Github.sh']
+      - ['light-CLRS','CLRS.sh']
+      - ['light-Solarized Light','Solarized_Light.sh']
+      - ['light-Tomorrow','Tomorrow.sh']
+  session_type:
+    label: "Session type"
+    help: "Note: Only tmux and screen sessions persist after closing the browser window"
+    widget: select
+    value: 'tmux'
+    options:
+      - ['login shell', 'shell', data-hide-use-system-version: true, data-set-use-system-version: '0']
+      - ['tmux', 'tmux']
+      - ['screen', 'screen', data-hide-use-system-version: true, data-set-use-system-version: '0']

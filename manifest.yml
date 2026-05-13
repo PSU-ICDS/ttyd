@@ -1,0 +1,8 @@
+---
+name: Persistent Terminal
+category: Interactive Apps
+subcategory: Server Applications
+role: batch_connect
+metadata:
+  pintype: Interactive Servers
+description: "Launch a web-based terminal session."

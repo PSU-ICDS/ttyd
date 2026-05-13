@@ -1,0 +1,15 @@
+#!/bin/bash
+
+SCREEN_BASENAME=sterminal_${port}
+STAGED_ROOT=<%= session.staged_root %>
+
+<%- if context.session_type == "screen" -%>
+# Wipe dead sessions
+screen -wipe
+
+# Wipe sessions for this job
+screen -S $SCREEN_BASENAME -X quit
+<%- elsif context.session_type == "tmux" -%>
+# Wipe tmux sessions
+tmux kill-session
+<%- end -%>
