@@ -8,6 +8,7 @@
 <%- sbatch_args = global_advanced == "1" ? global_sbatch_options.to_s.split("\n").flat_map { |arg| arg.split } : [] %>
 <% slurm_args.concat(sbatch_args) %>
 
+---
 batch_connect:
   template: "basic"
 script:  
